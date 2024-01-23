@@ -1,0 +1,212 @@
+---
+title: "Deciphering Toronto Fire Incidents"
+subtitle: "From Origins to Outcomes: Exploring Patterns and Economic Consequences of Urban Fires in Toronto"
+author: Sinan Ma
+thanks: "Code and data are available at: <https://github.com/Sinanma/Fire_Incidents_in_Toronto_up_to_2022.git>."
+date: today
+date-format: long
+abstract: "In this study, we analyzed fire incident data in the Great Toronto Area (GTA) from 2011 to 2022. We focused on the origins of fires, the building status, and the total estimated financial losses. Our analysis determined that cooking and engine area are more prone to fires, while building under special conditions do not have a significant cause in fire incident. Additionally, we noticed that there is a substantial expense associated with fire incident every year. The analysis indicated that fire incidents substantially affect the economy and urban resources, emphasizing the importance of improving fire safety and urban planning in populous cities to reduce their frequency and impact."
+format: pdf
+number-sections: true
+bibliography: references.bib
+---
+
+```{r}
+#| include: false
+#| warning: false
+#| message: false
+
+#### Workspace setup ####
+install.packages("here")
+install.packages("knitr")
+install.packages("tidyverse")
+library(here)
+library(knitr)
+library(tidyverse)
+
+#### Import the data ####
+fire_incidents_clean <-
+  read_csv(
+    here::here("outputs/data/cleaned_fire_incidents_data.csv"),
+    show_col_types = FALSE
+  )
+```
+
+
+# Introduction
+
+A report by the International Association of Fire Chiefs (IAFC) highlights the extensive economic impact of fire incidents, noting that in the United States alone, "the total cost of fire was estimated at $328 billion in 2010, accounting for approximately 2.2% of the U.S. GDP [@IAFC2023]". These number underscores the financial significance of our study, since it is not a problem happen only is US but all over the world. The significance of this research lies in its potential to guide urban planning and fire safety strategies.
+
+Fire incidents in urban environments not only have a significant threat to individual safety, but also to the economic and infrastructural stability of the city. Especially in the Greater Toronto Area (GTA) which have a dense population, the impact of fire incident can be particularly pronounced that may affect a wider range population from residents to emergency services and urban planners. This background affirms the necessity of analyzing fire incidents, which can provide insights about causes and consequences to help with urban area safety management.
+
+This study develops a deep analysis of the data of the fire incidents that Toronto Fire Service(TFS) have responded to between 2011 and 2022. We focus on identifying the origins of fires, examining the conditions of involved buildings, and quantifying the total estimated financial losses. Our analysis found that fires are more likely to start in cooking and engine areas, while buildings under special conditions aren't major contributors to fire incidents. We also noticed a significant yearly financial cost due to these fires, highlighting the economic impact and the importance of targeted fire safety measures.
+
+The paper is organized as follows: After the introduction, the Data section outlines the dataset and analysis methods. The Results section presents our findings, supported by tables and graphs. Finally, the Conclusion discusses the implications of these findings for urban safety and policy making decisions, setting the stage for future research in urban fire safety management.
+
+Note: Data is downloaded from `opendatatoronto` @opendatatoronto.
+
+
+# Data {#sec-data}
+
+## Overview {#sec-data-overview}
+
+In the fire incident dataset, our analysis focus on three pivotal aspects: 
+
+1. Relationship between Area of Origin and Number of Incident (@tbl-area-of-origin)
+
+2. Relationship between Building Status and Number of Incident (@tbl-building-status)  
+
+3. Yearly Total Loss Estimated in Dollar from 2011 to 2022 (@tbl-yearly-loss)
+
+Each element provides crucial data points for understanding fire incidents' impact on urban safety and financial support.
+
+The dataset used in this analysis is from `opendatatoronto` @opendatatoronto, with title of *Fire Incidents*. Data was collected, filtered, cleaned, and analyzed using statistical programming software R (@citeR). The following R packages was used in this paper: `tidyverse` [@tidyverse]; `knitr` [@knitr]; `janitor` [@janitor]; `here` [@here]. 
+
+
+## Results {#sec-data-overview}
+
+### Relationship between Area of Origin and Number of Incident
+The first table (@tbl-area-of-origin) lists the number of fire incidents (greater than 1000) by area of origin. From the table we notice cooking areas or kitchens have the most number of incidents of 3819, emphasizing the high risk associated with these spaces. Engine areas follow with 2,724 incidents, indicating a significant fire risk in mechanical spaces. Other areas needs some attention include trash storage, porches and balconies. This information directs attention to potential high-risk zones for fire safety interventions.
+
+We create a summary statistic on relationship between Area of Origin and Number of Incident using `summarise()`, `filter` and `arrange` from `tidyverse` [@tidyverse]. We use `kable()` from `knitr` [@knitr] to create Table @tbl-area-of-origin.
+
+```{r}
+#| label: tbl-area-of-origin
+#| tbl-cap: Distribution of Fire Incidents by Area of Origin in GTA
+#| echo: false
+
+incident_count_table <- fire_incidents_clean |>
+  group_by(area_of_origin) |>
+  summarise(number_of_incidents = n()) |>
+  filter(number_of_incidents > 1000) |>
+  arrange(desc(number_of_incidents))
+
+# Create a table using kable
+kable(incident_count_table, col.names = c("Area of Origin", "Number of Incidents"))
+```
+
+### Relationship between Building Status and Number of Incident
+
+The second table (@tbl-building-status) lists the number of fire incidents by building status. The majority of incidents occur in buildings with 'Normal' status (13,604), with a fewer for buildings under renovation or construction. This suggests that fire incidents are more likely to occur in operational buildings rather than those undergoing changes. Understanding the status when fires incident occur can bring up more effective building codes and safety regulations.
+
+We create a summary statistic on relationship between Building Status and Number of Incident using `summarise()`, `filter` and `arrange` from `tidyverse` [@tidyverse]. We use `kable()` from `knitr` [@knitr] to create Table @tbl-building-status.
+
+```{r}
+#| label: tbl-building-status
+#| tbl-cap: Distribution of Fire Incidents by Building Status in GTA
+#| echo: false
+
+building_status_count_table <- fire_incidents_clean |>
+  filter(building_status != "08 - Not Applicable", !is.na(building_status)) |>
+  group_by(building_status) |>
+  summarise(number_of_incidents = n()) |>
+  arrange(desc(number_of_incidents))
+
+# Create a table using kable
+kable(building_status_count_table, col.names = c("Building Status", "Number of Incidents"))
+```
+
+### Yearly Total Loss Estimated in Dollar from 2011 to 2022
+
+The third table (@tbl-yearly-loss) lists the total estimated dollar loss from fire incidents for each year from 2011 to 2022. The highest loss occurred in 2019, with a significant decrease in 2020, which may correlate with various factors, such as fire prevention strategies, changes in reporting practices. etc. Summary statistics here is important for understanding the financial impact of fire incidents and can provide information towards fire prevention and response.
+
+We create a summary statistic on yearly loss estimated due to fire incident using `summarise()`, `filter` and `arrange` from `tidyverse` [@tidyverse]. We use `kable()` from `knitr` [@knitr] to create Table @tbl-building-status.
+
+```{r}
+#| label: tbl-yearly-loss
+#| tbl-cap: Annual Estimated Loss due to Fire Incidents in Toronto (2011-2022)
+#| echo: false
+
+yearly_loss_table <- fire_incidents_clean |>
+  group_by(year) |>
+  summarise(
+    total_loss = sum(estimated_dollar_loss, na.rm = TRUE)
+  ) |>
+  arrange(desc(year))
+
+# Create a table using kable
+kable(yearly_loss_table, 
+      col.names = c("Year", "Total Estimated Dollar Loss"))
+```
+
+## Data Visulization {#sec-data-overview}
+
+Data visualization is powerful tool in our analysis, transforming complex datasets into clear, insightful graphs that to show the changes and trends.
+
+The graph (@fig-area-of-origin) illustrates the distribution of fire incident by area of origin, we notice that Area 24, which is cooking area, and Area 81, which is the engine area are more prone to fire incidents.
+
+The graph (@fig-building-status) illustrates the distribution of fire incident by building status, we notice that Status 01 representing normal status is more susceptible to fire incident. 
+
+The graph (@fig-yearly-loss) illustrates the yearly total estimated dollar loss due to fire incidents from 2011 to 2022. Each bar represents a year with a different color for easy differentiation. There is a noticeable peak in 2019, following this peak, there is a decline in 2020.
+
+We create a visualized bar chart on yearly loss estimated due to fire incident using using `ggplot()' from [@tidyverse] to create [@tidyverse].
+
+```{r}
+#| label: fig-area-of-origin
+#| fig-cap: Distribution of Fire Incidents by Area of Origin in GTA
+#| echo: false
+
+#there are too many char in area of origin, only leave the first two number to represent
+incident_count_table <- incident_count_table |>
+  mutate(area_short = substr(area_of_origin, 1, 2))
+
+# Create the pie chart
+ggplot(incident_count_table, aes(x = "", y = number_of_incidents, fill = area_short)) +
+  geom_bar(stat = "identity", width = 1) +
+  coord_polar(theta = "y") +
+  scale_fill_viridis_d() +
+  theme_minimal() +
+  labs(
+    title = "Distribution of Incidents by Area of Origin",
+    x = "",
+    y = "Number of Incidents",
+    fill = "Arean of Origin"
+  )
+```
+
+```{r}
+#| label: fig-building-status
+#| fig-cap: Distribution of Fire Incidents by Building Status in GTA
+#| echo: false
+
+building_status_count_table <- building_status_count_table |>
+  mutate(status_short = substr(building_status, 1, 2))
+
+ggplot(building_status_count_table, aes(x = "", y = number_of_incidents, fill = status_short)) +
+  geom_bar(stat = "identity", width = 1) +
+  coord_polar(theta = "y") +
+  scale_fill_viridis_d() +
+  theme_minimal() +
+  labs(
+    title = "Distribution of Incidents by Building Status",
+    x = "",
+    y = "Number of Incidents",
+    fill = "building Status"
+  )
+```
+
+```{r}
+#| label: fig-yearly-loss
+#| fig-cap: Annual Estimated Loss due to Fire Incidents in Toronto (2011-2022)
+#| echo: false
+
+ggplot(yearly_loss_table, aes(x = year, y = total_loss, fill = as.factor(year))) +
+  geom_col() +
+  scale_fill_viridis_d() +
+  theme_minimal() +
+  labs(
+    title = "Yearly Total Estimated Dollar Loss Due to Fire Incidents
+     
+    ",
+    x = "Year",
+    y = "Total Estimated Loss ($)"
+  )
+```
+
+# Appendix {-}
+
+
+# Additional data details
+# References
+
+
