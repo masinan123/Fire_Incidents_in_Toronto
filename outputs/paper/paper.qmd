@@ -44,7 +44,7 @@ Fire incidents in urban environments not only have a significant threat to indiv
 
 This study develops a deep analysis of the data of the fire incidents that Toronto Fire Service(TFS) have responded to between 2011 and 2022 published onto `opendatatoronto` [@opendatatoronto]. We focus on identifying the origins of fires, examining the conditions of involved buildings, and quantifying the total estimated financial losses. Our analysis found that fires are more likely to start in cooking and engine areas, while buildings under special conditions aren't major contributors to fire incidents. We also noticed a significant yearly financial cost due to these fires, highlighting the economic impact and the importance of targeted fire safety measures.
 
-The paper is organized as follows: After the introduction, the [Data section](#sec-data) outlines the dataset and analysis methods, focusing on three key aspects: area of origin, building status, and yearly loss estimation. The [Overview section](#sec-data-overview) provides the general information of this dataset. The [Results section](#sec-data-results) presents our findings, pointing out the relationships between fire incidents and key aspects, supported by tables. Finally, the [Data Visulization section](#sec-data-visulization) uses graphical representations to further elucidate relationships from previous section, providing a clear visual understanding of the data.
+The paper is organized as follows: After the introduction, the [Data section](#sec-data) outlines the dataset and analysis methods, focusing on three key aspects: area of origin, building status, and yearly loss estimation. The [Overview section](#sec-data-overview) provides the general information of this dataset. The [Results section](#sec-data-results) presents our findings, pointing out the relationships between fire incidents and key aspects, supported by tables. Finally, the [Data Visualization section](#sec-data-visulization) uses graphical representations to further elucidate relationships from previous section, providing a clear visual understanding of the data.
 
 
 # Data {#sec-data}
@@ -137,7 +137,7 @@ kable(yearly_loss_table,
 ```
 \newpage
 
-## Data Visulization {#sec-data-visulization}
+## Data Visualization {#sec-data-visulization}
 
 Data visualization is powerful tool in our analysis, transforming complex datasets into clear, insightful graphs that to show the changes and trends.
 
