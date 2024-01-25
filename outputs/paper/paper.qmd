@@ -7,6 +7,7 @@ date: today
 date-format: long
 abstract: "In this study, we analyzed fire incident data in the Great Toronto Area (GTA) from 2011 to 2022. We focused on the origins of fires, the building status, and the total estimated financial losses. Our analysis determined that cooking and engine area are more prone to fires, while building under special conditions do not have a significant cause in fire incident. Additionally, we noticed that there is a substantial expense associated with fire incident every year. The analysis indicated that fire incidents substantially affect the economy and urban resources, emphasizing the importance of improving fire safety and urban planning in populous cities to reduce their frequency and impact."
 format: pdf
+toc: true
 number-sections: true
 bibliography: references.bib
 ---
