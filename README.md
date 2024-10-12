@@ -1,4 +1,4 @@
-# Fire_Incidents_in_Toronto_up_to_2022
+# Fire Incidents in Toronto up to 2022
 
 ## Paper Overview
 
